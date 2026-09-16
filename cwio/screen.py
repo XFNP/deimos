@@ -223,7 +223,6 @@ def write_char(c: str, x: int, y: int, v: int, font: Font) -> None:
 
 
 def write(s: str, x: int, y: int, v: int, font: Font) -> None:
-    print("WRITE:", hex(addr), hex(data))
     f = font()
     ox = 0
     oy = 0
