@@ -6,5 +6,4 @@ from compat import sleep_ms
 
 def init():
     calc.init()
-    sleep_ms(15)
     calc.connect()
