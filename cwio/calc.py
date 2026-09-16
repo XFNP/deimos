@@ -2,7 +2,9 @@ import picoease as raw
 from compat import sleep_ms
 
 read = raw.read
-write = raw.write
+def write(addr, data):
+    print(f"CALC WRITE: addr=0x{addr:04X}, data=0x{data:02X}")
+    raw.write(addr, data)
 init = raw.init
 
 er0 = 0
