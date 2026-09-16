@@ -56,11 +56,20 @@ def run_app(app):
 
 try:
     while True:
+        print("LOOP START")
+    
+        print("CLEAR")
         screen.clear()
+    
+        print("RENDER")
         scr.render()
-        print("test")
+    
+        print("APPLY")
         screen.apply()
-        print("done")
+    
+        print("AFTER APPLY")
+    
+        key = keyboard.get_next()
         key = keyboard.get_next()
         if key == KB.KEY.SETTINGS:
             c = choose(["Updates", "WiFi", "Power", "Debug"])
