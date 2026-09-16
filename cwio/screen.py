@@ -6,10 +6,21 @@ import utime
 import rawscreen as raw
 
 def on() -> None:
+    print("ON: reset write")
     calc.write(SCR.POWER, SCR.ENUM.POWER.RESET)
-#    time.sleep(0.002)
+    print("ON: reset write done")
+
+    print("ON: sleep 1")
+    utime.sleep_ms(2)
+    print("ON: sleep 1 done")
+
+    print("ON: power-on write")
     calc.write(SCR.POWER, SCR.ENUM.POWER.ON)
-#    time.sleep(0.002)
+    print("ON: power-on write done")
+
+    print("ON: sleep 2")
+    utime.sleep_ms(2)
+    print("ON: sleep 2 done")
 
 
 def off() -> None:
