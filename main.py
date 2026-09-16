@@ -17,8 +17,6 @@ import garbage
 import loader
 from loader import apps
 
-class DebugInterrupt(Exception):
-    pass
 
 
 print("MAIN: start")
