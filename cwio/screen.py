@@ -102,9 +102,32 @@ def set_icon(icon: int, v: int) -> None:
 def apply() -> None:
     global oldbuf
     global buf
-    for i, (plane) in enumerate([SCR.ENUM.SELECT.PLANE0, SCR.ENUM.SELECT.PLANE1]):
-        raw.apply(calc.write, SCR.SELECT, SCR.BUFFER, SCR.WIDTH_B, SCR.TRUE_WIDTH_B, SCR.HEIGHT, SCR.HEADER, buf[i], (oldbuf[i] if oldbuf else None), plane, 0, 0, SCR.WIDTH_B, SCR.HEIGHT)
-    oldbuf = [buf[0][0:], buf[1][0:]]
+
+    for i, plane in enumerate([
+        SCR.ENUM.SELECT.PLANE0,
+        SCR.ENUM.SELECT.PLANE1
+    ]):
+        raw.apply(
+            calc.write,
+            SCR.SELECT,
+            SCR.BUFFER,
+            SCR.WIDTH_B,
+            SCR.TRUE_WIDTH_B,
+            SCR.HEIGHT,
+            SCR.HEADER,
+            buf[i],
+            oldbuf[i] if oldbuf else None,
+            plane,
+            0,
+            0,
+            SCR.WIDTH_B - 1,
+            SCR.HEIGHT - 1
+        )
+
+    oldbuf = [
+        buf[0][0:],
+        buf[1][0:]
+    ]
 
 
 def apply_icons() -> None:
