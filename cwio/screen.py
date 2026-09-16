@@ -103,10 +103,14 @@ def apply() -> None:
     global oldbuf
     global buf
 
+    print(">>> SCREEN APPLY CALLED")
+
     for i, plane in enumerate([
         SCR.ENUM.SELECT.PLANE0,
         SCR.ENUM.SELECT.PLANE1
     ]):
+        print(">>> APPLY PLANE", i, plane)
+
         raw.apply(
             calc.write,
             SCR.SELECT,
@@ -128,6 +132,8 @@ def apply() -> None:
         buf[0][0:],
         buf[1][0:]
     ]
+
+    print(">>> SCREEN APPLY FINISHED")
 
 
 def apply_icons() -> None:
