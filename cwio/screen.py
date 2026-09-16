@@ -2,7 +2,7 @@ from . import calc
 from .const import *
 from .font import Font
 import utime
-from . import raw_screen as raw
+import rawscreen as raw
 
 def on() -> None:
     calc.write(SCR.POWER, SCR.ENUM.POWER.RESET)
