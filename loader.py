@@ -24,7 +24,7 @@ class EntryPointError(Error):
 
 apps = []
 for path in os.listdir("apps"):
-    if path.endswith(".py") and (not path.startswith("_")) and fs.isfile("/apps/" + path):
+    if path.endswith(".py") and (not path.startswith("_")) and fs.isfile("apps/" + path):
         name = path[:-3]
         module = getattr(__import__("apps." + name), name)
         lib = hasattr(module, "lib")
