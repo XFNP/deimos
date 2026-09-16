@@ -3,7 +3,7 @@ import time as _time
 sleep = _time.sleep
 
 def sleep_ms(ms):
-    _time.sleep(ms / 1000.0)
+    _time.sleep(ms)
 
 def sleep_us(us):
     _time.sleep(us / 1000000.0)
