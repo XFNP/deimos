@@ -1,7 +1,7 @@
 from cwio import *
 from cwio.const import *
 from cwio.font import Font
-import time
+import compat
 import machine
 from machine import Pin
 import sys
