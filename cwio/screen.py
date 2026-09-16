@@ -2,6 +2,7 @@ from . import calc
 from .const import *
 from .font import Font
 import time
+import utime
 import rawscreen as raw
 
 def on() -> None:
