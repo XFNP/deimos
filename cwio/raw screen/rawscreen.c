@@ -758,7 +758,7 @@ static PyMethodDef rawscreen_methods[] = {
 /* Module definition                                          */
 /* --------------------------------------------------------- */
 
-static struct PyModuleDef rawscreen_module = {
+static struct PyModuleDef raw_screen_module = {
     PyModuleDef_HEAD_INIT,
     "rawscreen",
     "Deimos raw screen acceleration module.",
