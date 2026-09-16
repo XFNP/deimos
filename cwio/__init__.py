@@ -2,7 +2,7 @@ from . import calc
 from . import const
 from . import screen
 from . import keyboard
-from time import sleep_ms
+from compat import sleep_ms
 
 def init():
     calc.init()
