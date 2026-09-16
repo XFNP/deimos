@@ -58,8 +58,9 @@ try:
     while True:
         screen.clear()
         scr.render()
-        screen.apply()
         print("test")
+        screen.apply()
+        print("done")
         key = keyboard.get_next()
         if key == KB.KEY.SETTINGS:
             c = choose(["Updates", "WiFi", "Power", "Debug"])
