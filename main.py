@@ -59,6 +59,7 @@ try:
         screen.clear()
         scr.render()
         screen.apply()
+        print("test")
         key = keyboard.get_next()
         if key == KB.KEY.SETTINGS:
             c = choose(["Updates", "WiFi", "Power", "Debug"])
