@@ -1,14 +1,14 @@
 from . import calc
 from .const import *
 from .font import Font
-import utime
+import time
 import rawscreen as raw
 
 def on() -> None:
     calc.write(SCR.POWER, SCR.ENUM.POWER.RESET)
-    utime.sleep_ms(2)
+    time.sleep(0.002)
     calc.write(SCR.POWER, SCR.ENUM.POWER.ON)
-    utime.sleep_ms(2)
+    time.sleep(0.002)
 
 
 def off() -> None:
