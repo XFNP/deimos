@@ -11,7 +11,7 @@ rawscreen = Extension(
 )
 
 setup(
-    name="rawscreen",
+    name="raw_screen",
     version="1.0.0",
     ext_modules=[rawscreen],
 )
