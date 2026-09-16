@@ -1,7 +1,7 @@
 import time
 
 def sleep_ms(ms):
-    time.sleep(ms)
+    time.sleep(ms / 1000)
 
 def sleep_us(us):
     time.sleep(us / 1_000_000.0)
