@@ -21,15 +21,59 @@ class DebugInterrupt(Exception):
     pass
 
 
+print("MAIN: start")
+
+print("MAIN: init()")
 init()
+print("MAIN: init() done")
 
+print("MAIN: screen.on()")
 screen.on()
+print("MAIN: screen.on() done")
+
+print("MAIN: screen.init()")
 screen.init()
+print("MAIN: screen.init() done")
+
+print("MAIN: keyboard.init()")
 keyboard.init()
+print("MAIN: keyboard.init() done")
 
+print("MAIN: creating Screen")
 scr = ui.Screen()
+print("MAIN: Screen created")
 
-scr + (title := ui.Label(0, 0, "Welcome to Deimos", SCR.COLOR.BLACK, font.classwiz_cw)) + (desc := ui.Label(0, 20, "Press HOME for a list of apps.\n" + "\n" + "Go to https://github.com/mgismissing/deimos for\n" + "more info about this project.", SCR.COLOR.BLACK, font.miniwi))
+print("MAIN: creating title")
+title = ui.Label(
+    0,
+    0,
+    "Welcome to Deimos",
+    SCR.COLOR.BLACK,
+    font.classwiz_cw
+)
+print("MAIN: title created")
+
+print("MAIN: adding title")
+scr + title
+print("MAIN: title added")
+
+print("MAIN: creating description")
+desc = ui.Label(
+    0,
+    20,
+    "Press HOME for a list of apps.\n\n"
+    "Go to https://github.com/mgismissing/deimos for\n"
+    "more info about this project.",
+    SCR.COLOR.BLACK,
+    font.miniwi
+)
+print("MAIN: description created")
+
+print("MAIN: adding description")
+scr + desc
+print("MAIN: description added")
+
+print("MAIN: entering loop")
 
 applist = []
 for app in apps:
