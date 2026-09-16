@@ -7,9 +7,9 @@ import rawscreen as raw
 
 def on() -> None:
     calc.write(SCR.POWER, SCR.ENUM.POWER.RESET)
-    time.sleep(0.002)
+//    time.sleep(0.002)
     calc.write(SCR.POWER, SCR.ENUM.POWER.ON)
-    time.sleep(0.002)
+//    time.sleep(0.002)
 
 
 def off() -> None:
