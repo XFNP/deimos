@@ -1,5 +1,5 @@
 import picoease as raw
-from time import sleep_ms
+from compat import sleep_ms
 
 read = raw.read
 write = raw.write
