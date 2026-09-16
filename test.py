@@ -1,338 +1,137 @@
 import rawscreen
 
+WIDTH = 32
+HEIGHT = 16
+WIDTH_B = WIDTH // 8
 
-print("=== rawscreen test ===")
-print("module:", rawscreen)
-print()
-
-
-# ------------------------------------------------------------
-# 1. Check functions
-# ------------------------------------------------------------
-
-print("Functions:")
-
-for name in (
-    "in_bounds",
-    "clear",
-    "apply",
-    "image",
-):
-    print(
-        " ",
-        name,
-        "OK" if hasattr(rawscreen, name) else "MISSING"
-    )
-
-print()
-
-
-# ------------------------------------------------------------
-# 2. Test in_bounds()
-# ------------------------------------------------------------
-
-print("=== in_bounds ===")
-
-tests = [
-    (0, 0, 10, 10),
-    (9, 9, 10, 10),
-    (10, 10, 10, 10),
-    (-1, 0, 10, 10),
-    (0, -1, 10, 10),
-]
-
-for x, y, w, h in tests:
-    print(
-        f"in_bounds({x}, {y}, {w}, {h}) =",
-        rawscreen.in_bounds(x, y, w, h)
-    )
-
-print()
-
-
-# ------------------------------------------------------------
-# 3. Test clear()
-# ------------------------------------------------------------
-
-print("=== clear ===")
-
-buffer = bytearray([
-    0x11,
-    0x22,
-    0x33,
-    0x44,
-    0x55,
-    0x66,
-    0x77,
-    0x88,
-])
-
-print("before:", buffer.hex())
-
-rawscreen.clear(
-    buffer,
-    2,
-    6
-)
-
-print("after: ", buffer.hex())
-
-print()
-
-
-# ------------------------------------------------------------
-# 4. Test apply()
-# ------------------------------------------------------------
-
-print("=== apply ===")
+# Simulated display memory
+display = bytearray(WIDTH_B * (HEIGHT + 1))
 
 writes = []
 
 
-def write(address, data):
-    print(
-        f"WRITE address={address} data={data}"
-    )
+def write(address, value):
+    writes.append((address, value))
 
-    writes.append(
-        (address, data)
-    )
+    if 0 <= address < len(display):
+        display[address] = value
 
 
-# A small fake screen buffer.
-#
-# width = 8 bytes
-# height = 4 rows
-#
-# Put obvious non-zero data into it.
+print("=== rawscreen hardware-independent test ===")
+print()
 
-screen = bytearray([
-    0x01, 0x02, 0x03, 0x04,
-    0x05, 0x06, 0x07, 0x08,
+# Make a simple checker/stripe pattern
+screen = bytearray(WIDTH_B * HEIGHT)
 
-    0x11, 0x12, 0x13, 0x14,
-    0x15, 0x16, 0x17, 0x18,
+for y in range(HEIGHT):
+    for xb in range(WIDTH_B):
+        # Alternating pattern
+        if ((y // 2) + xb) & 1:
+            screen[y * WIDTH_B + xb] = 0xFF
+        else:
+            screen[y * WIDTH_B + xb] = 0x00
 
-    0x21, 0x22, 0x23, 0x24,
-    0x25, 0x26, 0x27, 0x28,
+print("Screen buffer:")
+for y in range(HEIGHT):
+    row = ""
 
-    0x31, 0x32, 0x33, 0x34,
-    0x35, 0x36, 0x37, 0x38,
-])
+    for xb in range(WIDTH_B):
+        value = screen[y * WIDTH_B + xb]
 
+        for bit in range(8):
+            row += "#" if (value & (0x80 >> bit)) else "."
 
-# No old buffer means every pixel
-# should be considered changed.
+    print(row)
 
-oldscreen = None
+print()
 
+print("Calling rawscreen.apply()...")
 
 rawscreen.apply(
     write,
-
-    # const_select
-    100,
-
-    # const_buffer
-    200,
-
-    # const_width_b
-    8,
-
-    # const_true_width_b
-    8,
-
-    # const_height
-    4,
-
-    # const_header
-    0,
-
-    # buffer
+    0,              # const_select
+    0,              # const_buffer
+    WIDTH_B,        # const_width_b
+    WIDTH_B,        # const_true_width_b
+    HEIGHT,         # const_height
+    0,              # const_header
     screen,
-
-    # oldbuffer
-    oldscreen,
-
-    # plane
+    None,           # oldbuffer
+    0,              # plane
     0,
-
-    # start_x
     0,
-
-    # start_y
-    0,
-
-    # end_x
-    7,
-
-    # end_y
-    3,
+    WIDTH_B - 1,
+    HEIGHT - 1
 )
 
-
-print()
-print("Total writes:", len(writes))
-
+print("Number of writes:", len(writes))
 print()
 
-
-# ------------------------------------------------------------
-# 5. Test apply() with old buffer
-# ------------------------------------------------------------
-
-print("=== apply() changed-pixel test ===")
-
-writes.clear()
-
-
-oldscreen = bytearray(screen)
-
-# Change exactly one byte.
-screen[10] = 0xFE
-
-
-rawscreen.apply(
-    write,
-
-    100,
-    200,
-    8,
-    8,
-    4,
-    0,
-
-    screen,
-    oldscreen,
-
-    1,
-
-    0,
-    0,
-    7,
-    3,
-)
-
-
-print()
-print(
-    "Changed-pixel writes:",
-    len(writes)
-)
+print("First writes:")
+for address, value in writes[:20]:
+    print(f"address={address:4d} value=0x{value:02X}")
 
 print()
 
+print("Simulated display memory:")
 
-# ------------------------------------------------------------
-# 6. Test image()
-# ------------------------------------------------------------
+for y in range(HEIGHT + 1):
+    row = ""
 
-print("=== image ===")
+    for xb in range(WIDTH_B):
+        value = display[y * WIDTH_B + xb]
+
+        for bit in range(8):
+            row += "#" if (value & (0x80 >> bit)) else "."
+
+    print(row)
+
+print()
+print("=== image() test ===")
 
 paint_calls = []
 
 
-def paint(
-    x,
-    y,
-    plane,
-    brush,
-    value
-):
-    print(
-        "PAINT",
-        "x=", x,
-        "y=", y,
-        "plane=", plane,
-        "brush=", hex(brush),
-        "value=", value
-    )
+def paint(x, y, plane, brush, value):
+    paint_calls.append((x, y, plane, brush, value))
 
-    paint_calls.append(
-        (
-            x,
-            y,
-            plane,
-            brush,
-            value
-        )
-    )
-
-
-# 16x4 monochrome image.
-#
-# 2 bytes per row.
 
 image = bytearray([
-    0xFF, 0x00,
-    0x81, 0x00,
-    0xBD, 0x00,
-    0xFF, 0x00,
+    0xFF,
+    0x00,
+    0x81,
+    0x00,
+    0xBD,
+    0x00,
+    0xFF,
+    0x00,
 ])
 
-
 rawscreen.image(
-    # x
-    0,
-
-    # y
-    0,
-
-    # w
-    16,
-
-    # h
-    4,
-
-    # v
-    0xFF,
-
-    # const_bright
-    0x01,
-
-    # const_dark
-    0x02,
-
-    # const_width
-    16,
-
-    # const_height
-    4,
-
-    # paint
+    0,              # x
+    0,              # y
+    16,             # image width
+    4,              # image height
+    0xFF,           # v
+    0x01,           # const_bright
+    0x02,           # const_dark
+    32,              # const_width
+    16,             # const_height
     paint,
-
-    # image
-    image,
+    image
 )
 
+print("Paint calls:", len(paint_calls))
 
-print()
-print(
-    "Total paint calls:",
-    len(paint_calls)
-)
-
-print()
-
-
-# ------------------------------------------------------------
-# Final result
-# ------------------------------------------------------------
-
-print("=== result ===")
-
-if not hasattr(rawscreen, "apply"):
-    print("FAIL: rawscreen.apply() missing")
-elif len(writes) == 0:
-    print("WARNING: apply() produced no writes")
-else:
-    print("apply() produced writes")
-
-if len(paint_calls) == 0:
-    print("WARNING: image() produced no paint calls")
-else:
-    print("image() produced paint calls")
+for call in paint_calls[:20]:
+    x, y, plane, brush, value = call
+    print(
+        f"x={x:3d} "
+        f"y={y:3d} "
+        f"plane={plane} "
+        f"brush=0x{brush:06X} "
+        f"value={value}"
+    )
 
 print()
 print("=== done ===")
