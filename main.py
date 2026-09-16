@@ -172,5 +172,3 @@ while True:
     elif key == KB.KEY.AC:
         power.deepsleep()
         
-except DebugInterrupt as e:
-    print("DEBUG: " + (str(e)))
