@@ -9,3 +9,4 @@ def init():
     calc.connect()
     calc.connect()
     calc.connect()
+    calc.init()
